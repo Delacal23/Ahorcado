@@ -3,6 +3,7 @@
 import java.awt.Image;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -21,6 +22,7 @@ public class VentanaAhorcado extends javax.swing.JFrame {
     
     String palabraOculta = "CETYS";
     
+     String [] listaDePalabras ;
     
     int numeroFallos = 0;
     
@@ -29,29 +31,61 @@ public class VentanaAhorcado extends javax.swing.JFrame {
      */
     public VentanaAhorcado() {
         initComponents();
-        // DIBUJA LA IMAGEN  DEL AHORCADO
-        dibujaImagen (0); 
+
+        eligePalabraParaAdivinar();
+        
+        //dibuja la imagen del ahorcado sin fallos
+        dibujaImagen(0);
+        ponGuiones();
     }
 
+    
+        private void eligePalabraParaAdivinar(){
+        
+        listaDePalabras = new String[] {"CETYS","MERCURIO","VENUS","TIERRA","MARTE","JUPITER","SATURNO","URANO","NEPTUNO","PLUTON"}; 
+        
+        Random aleatorio = new Random();
+        //elijo una posiciñon al azar
+        int posicionElegida = aleatorio.nextInt( listaDePalabras.length);
+        //guardo en la palabraOculta la que haya salido al azar
+        palabraOculta = listaDePalabras[posicionElegida];
+    }
+    
+    
+    
+    
+      private void ponGuiones(){
+        //crea un nuevo string con tantos guiones bajos y espacios
+        //en blanco como letras tenga la palabra a adivinar
+        String palabraConGuiones = "";
+        for (int i=0; i< palabraOculta.length(); i++){
+            palabraConGuiones = palabraConGuiones + "_ ";
+        }
+        pantalla.setText(palabraConGuiones);
+        
+    }
+    
+    
     private void dibujaImagen (int numeroFallos){
         ImageIcon miImagen = null;
-        URL nombreimagen = null;
+        URL nombreImagen = null;
         int ancho = panelAhorcado.getWidth();
         int alto = panelAhorcado.getHeight();
         
         switch (numeroFallos) {
-            case 0 : nombreimagen = ((getClass().getResource("/imagenes/ahorcado_0.png"))); break;
-            case 1 : nombreimagen = ((getClass().getResource("/imagenes/ahorcado_1.png"))); break;
-            case 2 : nombreimagen = ((getClass().getResource("/imagenes/ahorcado_2.png"))); break;
-            case 3 : nombreimagen = ((getClass().getResource("/imagenes/ahorcado_3.png"))); break;
-            case 4 : nombreimagen = ((getClass().getResource("/imagenes/ahorcado_4.png"))); break;
-            case 5 : nombreimagen = ((getClass().getResource("/imagenes/ahorcado_5.png"))); break;
-            default  : nombreimagen = ((getClass().getResource("/imagenes/ahorcado_fin.png"))); break;
+            case 0 : nombreImagen = ((getClass().getResource("/imagenes/ahorcado_0.png"))); break;
+            case 1 : nombreImagen = ((getClass().getResource("/imagenes/ahorcado_1.png"))); break;
+            case 2 : nombreImagen = ((getClass().getResource("/imagenes/ahorcado_2.png"))); break;
+            case 3 : nombreImagen = ((getClass().getResource("/imagenes/ahorcado_3.png"))); break;
+            case 4 : nombreImagen = ((getClass().getResource("/imagenes/ahorcado_4.png"))); break;
+            case 5 : nombreImagen = ((getClass().getResource("/imagenes/ahorcado_5.png"))); break;
+            case -1 : nombreImagen = getClass().getResource("/imagenes/acertasteTodo.png"); break;
+            default  : nombreImagen = ((getClass().getResource("/imagenes/ahorcado_fin.png"))); break;
             
         }
         
         
-        miImagen = new ImageIcon (new ImageIcon (nombreimagen).getImage() .getScaledInstance (ancho, alto, Image.SCALE_DEFAULT));
+        miImagen = new ImageIcon (new ImageIcon (nombreImagen).getImage() .getScaledInstance (ancho, alto, Image.SCALE_DEFAULT));
        
        panelAhorcado.setIcon(miImagen);
            
@@ -66,7 +100,7 @@ public class VentanaAhorcado extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        pantalla = new javax.swing.JLabel();
         B = new javax.swing.JButton();
         A = new javax.swing.JButton();
         C = new javax.swing.JButton();
@@ -100,10 +134,10 @@ public class VentanaAhorcado extends javax.swing.JFrame {
         setBackground(new java.awt.Color(204, 255, 255));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("_ _ _ _ _");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 6, 500, 46));
+        pantalla.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
+        pantalla.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        pantalla.setText("_ _ _ _ _");
+        getContentPane().add(pantalla, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 6, 500, 46));
 
         B.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
         B.setText("B");
@@ -207,12 +241,17 @@ public class VentanaAhorcado extends javax.swing.JFrame {
         getContentPane().add(I, new org.netbeans.lib.awtextra.AbsoluteConstraints(374, 332, -1, -1));
 
         R.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
-        R.setText("B");
+        R.setText("R");
         R.setPreferredSize(new java.awt.Dimension(40, 40));
         R.setSize(new java.awt.Dimension(40, 40));
         R.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 RMousePressed(evt);
+            }
+        });
+        R.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RActionPerformed(evt);
             }
         });
         getContentPane().add(R, new org.netbeans.lib.awtextra.AbsoluteConstraints(328, 378, -1, -1));
@@ -407,12 +446,34 @@ public class VentanaAhorcado extends javax.swing.JFrame {
     
     
     private void chequeaLetra (String letra){
-        numeroFallos ++;
+letra = letra.toUpperCase();
+       //String palabraConGuiones = pantalla.getText();
+       StringBuilder palabraConGuiones = new StringBuilder(pantalla.getText());
+       
+       if (palabraOculta.contains(letra)){
+           for (int i=0; i < palabraOculta.length(); i++){
+               if (palabraOculta.charAt(i) == letra.charAt(0)){
+                   palabraConGuiones.setCharAt(2*i, letra.charAt(0));
+               }
+           }
+           pantalla.setText(palabraConGuiones.toString());
+       }
+       else{
+        numeroFallos++;
         dibujaImagen(numeroFallos);
+       }
+       
+       if (!pantalla.getText().contains("_")){
+            dibujaImagen(-1);
+       }
+       
+       
     }
-    
 
-    
+    //    
+//                      palabraConGuiones = palabraConGuiones.substring(0, 2*i) 
+//                                    + letra
+//                                    + palabraConGuiones.substring(2*i+1);
     
     private void chequeaBoton(JButton miBoton){
         miBoton.setEnabled(false);
@@ -525,6 +586,10 @@ public class VentanaAhorcado extends javax.swing.JFrame {
          chequeaBoton(  (JButton) evt.getSource());
     }//GEN-LAST:event_ZMousePressed
 
+    private void RActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_RActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -587,8 +652,8 @@ public class VentanaAhorcado extends javax.swing.JFrame {
     private javax.swing.JButton Y;
     private javax.swing.JButton Z;
     private javax.swing.JButton jButton27;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel panelAhorcado;
+    private javax.swing.JLabel pantalla;
     private javax.swing.JButton Ñ;
     // End of variables declaration//GEN-END:variables
 }
